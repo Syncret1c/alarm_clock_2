@@ -8,14 +8,15 @@ def display_time():
     
     global thread_countdown
     while True:
+        date_time = datetime.now().strftime("%H:%M:%S")
         try:
             if thread_countdown.is_alive:
                 pass #add something else here
             else:
-                print(datetime.now().strftime("%H:%M:%S"))
+                print(date_time)
                 time.sleep(1)
         except:
-            print(datetime.now().strftime("%H:%M:%S"))
+            print(date_time)
             time.sleep(1)
 #-----------------------------------#
 def countdown(seconds):
