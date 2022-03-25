@@ -1,12 +1,22 @@
 import time
 import winsound
 import threading
+import signal
+import sys
 from datetime import datetime
 #-----------------------------------#
+#GLOBAL VARIABLES
+running = True
+
+#-----------------------------------#
 #This section is meant to display the time. I have it checking to see if countdown is still alive and if it is, then it'll do something. I honestly can't remember what tf I was thinking when I started that, but that is how it is for now. I'll probably go ahead and change it later cause looking back at it after not for a few days, that shit looks wack.
-def display_time():
-    global thread_countdown
-    while True:
+
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C!')
+    running = False
+
+def display_time():    
+    while running:
         date_time = datetime.now().strftime("%H:%M:%S")
         print(date_time)
         time.sleep(1)
@@ -32,21 +42,24 @@ class alarm_clock():
             quit()
         else:
             while self.seconds >= 0:
-                thread_countdown = threading.Thread(target=countdown, args=(self.seconds,))
-                thread_countdown.start()
                 try:
                     if not thread_display.is_alive:
                         thread_display.start()
                 except:
                     thread_display = threading.Thread(target=display_time)
                     thread_display.start()
+                thread_countdown = threading.Thread(target=countdown, args=(self.seconds,))
+                thread_countdown.start()
                 thread_countdown.join()
+                thread_display.join()
                 self.time_set()
 
 #-----------------------------------#
 if __name__ == "__main__":
     test = alarm_clock()
     test.run()
+    signal.signal(signal.SIGINT, signal_handler)
+    #print('Press Ctrl+C')
 #-----------------------------------#
 
 #This section below is just the original. It can be ignored overall.
