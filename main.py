@@ -3,7 +3,9 @@ import winsound
 import threading
 from datetime import datetime
 #-----------------------------------#
+#This section is meant to display the time. I have it checking to see if countdown is still alive and if it is, then it'll do something. I honestly can't remember what tf I was thinking when I started that, but that is how it is for now. I'll probably go ahead and change it later cause looking back at it after not for a few days, that shit looks wack.
 def display_time():
+    
     global thread_countdown
     while True:
         try:
@@ -31,7 +33,7 @@ class alarm_clock():
     
     def time_set(self):
         self.seconds = int(input("How many seconds: "))
-        
+    #This run method honestly looks terrible. I hate it. But this was like the messy and brute way I got things to display.Pretty sure the try and except stuff can be removed and this run method can be cut down a lot and the work can be put in other methods most likely.
     def run(self):
         if self.seconds <= -1:
             quit()
@@ -55,6 +57,8 @@ if __name__ == "__main__":
     test = alarm_clock()
     test.run()
 #-----------------------------------#
+
+#This section below is just the original. It can be ignored overall.
 
 #def countdown(seconds):
     #while seconds:
