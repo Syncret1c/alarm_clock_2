@@ -5,23 +5,14 @@ from datetime import datetime
 #-----------------------------------#
 #This section is meant to display the time. I have it checking to see if countdown is still alive and if it is, then it'll do something. I honestly can't remember what tf I was thinking when I started that, but that is how it is for now. I'll probably go ahead and change it later cause looking back at it after not for a few days, that shit looks wack.
 def display_time():
-    
     global thread_countdown
     while True:
         date_time = datetime.now().strftime("%H:%M:%S")
-        try:
-            if thread_countdown.is_alive:
-                pass #add something else here
-            else:
-                print(date_time)
-                time.sleep(1)
-        except:
-            print(date_time)
-            time.sleep(1)
+        print(date_time)
+        time.sleep(1)
 #-----------------------------------#
 def countdown(seconds):
     while seconds >= 0:
-        print(datetime.now().strftime("%H:%M:%S"))
         seconds -= 1
         time.sleep(1)
     print("Done")
@@ -29,12 +20,13 @@ def countdown(seconds):
 #-----------------------------------#
 class alarm_clock():
     def __init__(self):
-        print(datetime.now().strftime("%H:%M:%S"))
         self.time_set()
     
     def time_set(self):
         self.seconds = int(input("How many seconds: "))
-    #This run method honestly looks terrible. I hate it. But this was like the messy and brute way I got things to display.Pretty sure the try and except stuff can be removed and this run method can be cut down a lot and the work can be put in other methods most likely.
+    # This run method honestly looks terrible. I hate it. But this was like the messy and brute way I got things to display. Pretty sure the try and except stuff can be removed and this run method can be cut down a lot and the work can be put in other methods most likely.
+
+    # So realized the try and except is actually still needed. The try and except is there to not recreate a thread_display thread. So a new thread isn't created each time you make a new timer/count_down.
     def run(self):
         if self.seconds <= -1:
             quit()
@@ -42,16 +34,14 @@ class alarm_clock():
             while self.seconds >= 0:
                 thread_countdown = threading.Thread(target=countdown, args=(self.seconds,))
                 thread_countdown.start()
-                thread_countdown.join()
                 try:
                     if not thread_display.is_alive:
                         thread_display.start()
                 except:
                     thread_display = threading.Thread(target=display_time)
                     thread_display.start()
+                thread_countdown.join()
                 self.time_set()
-                if self.seconds <= -1:
-                    quit()
 
 #-----------------------------------#
 if __name__ == "__main__":
