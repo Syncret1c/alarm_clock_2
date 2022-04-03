@@ -13,28 +13,26 @@ running = True
 
 def signal_handler(sig, frame):
     global running
-    print('You pressed Ctrl+C!')
     running = False
-
+    print('You pressed Ctrl+C!')
+#-----------------------------------#
 def display_time():    
     global running
     while running:
         date_time = datetime.now().strftime("%H:%M:%S")
         print(date_time)
         time.sleep(1)
-    
 #-----------------------------------#
 def countdown(seconds):
-    global test
+    global a_clock
     global running
     while running:
-        while seconds >= 0 and running:
+        while seconds >= 0:
             seconds -= 1
             time.sleep(1)
         print("Done")
-        test.time_set()
-    
-    winsound.Beep(3000, 1000)
+        #winsound.Beep(3000, 1000)
+        a_clock.time_set()
 #-----------------------------------#
 class alarm_clock():
     def __init__(self):
@@ -53,20 +51,19 @@ class alarm_clock():
             sys.exit(0)
         else:
             while self.seconds >= 0:
-                thread_display = threading.Thread(target=display_time)
                 thread_countdown = threading.Thread(target=countdown, args=(self.seconds,))
-                thread_display.start()
+                thread_display = threading.Thread(target=display_time)
                 thread_countdown.start()
+                thread_display.start()
                 thread_countdown.join()
                 thread_display.join()
 
 #-----------------------------------#
 if __name__ == "__main__":
-    
-    test = alarm_clock()
-    test.run()
     signal.signal(signal.SIGINT, signal_handler)
-    
+    a_clock = alarm_clock()
+    a_clock.run()
+
 #-----------------------------------#
 
 #This section below is just the original. It can be ignored overall.
